@@ -7,6 +7,7 @@ import argparse
 from http import HTTPStatus
 from threading import Thread
 
+
 time_interval = 1
 start_time = time.time()
 running = True
@@ -35,7 +36,11 @@ def login(user_name, user_passwd):
 def post_cpu(user_hash):
     while running:
         cpu = psutil.cpu_percent()
-        r = requests.post("http://localhost:5000/cpu", json={"hash": user_hash, "cpu": cpu, "time": time.time()})
+        try:
+            r = requests.post("http://localhost:5000/cpu", json={"hash": user_hash, "cpu": cpu, "time": time.time()})
+        except Exception:
+            print("Connection error")
+            continue
         check_response_status(r)
         print(r.json())
         time.sleep(time_interval)
@@ -56,7 +61,11 @@ def draw_data(data_list):
 def get_cpu(user_hash):
     while running:
         input("Press Enter to get cpu data")
-        r = requests.get(f"http://localhost:5000/cpu?hash={user_hash}&start_time={start_time}&cur_time={time.time()}")
+        try:
+            r = requests.get(f"http://localhost:5000/cpu?hash={user_hash}&start_time={start_time}&cur_time={time.time()}")
+        except Exception:
+            print("Connection error")
+            continue
         check_response_status(r)
         print(r.json())
         draw_data(r.json()['get_data'])
