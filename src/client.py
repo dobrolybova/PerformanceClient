@@ -6,7 +6,7 @@ from datetime import datetime
 import argparse
 from http import HTTPStatus
 from threading import Thread
-
+import getpass
 
 time_interval = 1
 start_time = time.time()
@@ -23,7 +23,6 @@ def check_response_status(response):
 def read_command_line_args():
     parser = argparse.ArgumentParser(description='Help.')
     parser.add_argument('--user', "-u", type=str, action='store', help='user')
-    parser.add_argument('--passwd', "-p", type=str, action='store', help='passwd')
     return parser.parse_args()
 
 
@@ -40,6 +39,7 @@ def post_cpu(user_hash):
             r = requests.post("http://localhost:5000/cpu", json={"hash": user_hash, "cpu": cpu, "time": time.time()})
         except Exception:
             print("Connection error")
+            time.sleep(time_interval)
             continue
         check_response_status(r)
         print(r.json())
@@ -65,6 +65,7 @@ def get_cpu(user_hash):
             r = requests.get(f"http://localhost:5000/cpu?hash={user_hash}&start_time={start_time}&cur_time={time.time()}")
         except Exception:
             print("Connection error")
+            time.sleep(time_interval)
             continue
         check_response_status(r)
         print(r.json())
@@ -82,6 +83,7 @@ def start_threads(user_hash):
 def main():
     global running
     args = read_command_line_args()
+    args.passwd = getpass.getpass()
     user_hash = login(args.user, args.passwd)
     try:
         post_thread, get_thread = start_threads(user_hash)
