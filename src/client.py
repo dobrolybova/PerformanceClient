@@ -47,8 +47,8 @@ def post_cpu(user_hash):
 
 
 def draw_data(data_list):
-    y = [i[0] for i in data_list]
-    x = [datetime.utcfromtimestamp(i[1]).strftime('%H:%M:%S') for i in data_list]
+    y = data_list[0]
+    x = [datetime.utcfromtimestamp(i).strftime('%H:%M:%S') for i in data_list[1]]
     print(x)
     print(y)
     plt.plot(x, y)
@@ -60,7 +60,7 @@ def draw_data(data_list):
 
 def get_cpu(user_hash):
     while running:
-        input("Press Enter to get cpu data")
+        input("Press Enter to get cpu data\n")
         try:
             r = requests.get(f"http://localhost:5000/cpu?hash={user_hash}&start_time={start_time}&cur_time={time.time()}")
         except Exception:
