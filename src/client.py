@@ -14,9 +14,8 @@ running = True
 
 
 def check_response_status(response):
-    if response.status_code == HTTPStatus.UNAUTHORIZED:
-        reason = response.json()["reason"]
-        print(f"ERROR: {reason} ")
+    if response.status_code != HTTPStatus.OK:
+        print(f"ERROR: {response.json()} ")
         exit(2)
 
 
@@ -24,6 +23,12 @@ def read_command_line_args():
     parser = argparse.ArgumentParser(description='Help.')
     parser.add_argument('--user', "-u", type=str, action='store', help='user')
     return parser.parse_args()
+
+
+def register(user_name, user_passwd):
+    r = requests.post("http://localhost:5000/register", json={"user": user_name, "passwd": user_passwd})
+    check_response_status(r)
+    return r.json()['hash']
 
 
 def login(user_name, user_passwd):
@@ -69,7 +74,7 @@ def get_cpu(user_hash):
             continue
         check_response_status(r)
         print(r.json())
-        draw_data(r.json()['get_data'])
+        #draw_data(r.json()['payload'])
 
 
 def start_threads(user_hash):
@@ -84,6 +89,7 @@ def main():
     global running
     args = read_command_line_args()
     args.passwd = getpass.getpass()
+    user_hash = register(args.user, args.passwd)
     user_hash = login(args.user, args.passwd)
     try:
         post_thread, get_thread = start_threads(user_hash)
