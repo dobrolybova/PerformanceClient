@@ -34,16 +34,22 @@ def credentials_window_handler(window_title: str, authentication_handler: Authen
     window.mainloop()
 
 
-def clicked_register(authentication_handler, window, user_entry, passwd_entry) -> None:
+def clicked_register(authentication_handler: AuthenticationHandler, window: Tk, user_entry: Entry, passwd_entry: Entry) -> None:
     authentication_handler.register(user_entry.get(), passwd_entry.get())
     if authentication_handler.get_hash():
-        window.destroy()
+        try:
+            window.destroy()
+        except TclError:
+            pass
 
 
-def clicked_login(authentication_handler, window, user_entry, passwd_entry) -> None:
+def clicked_login(authentication_handler: AuthenticationHandler, window: Tk, user_entry: Entry, passwd_entry: Entry) -> None:
     authentication_handler.login(user_entry.get(), passwd_entry.get())
     if authentication_handler.get_hash():
-        window.destroy()
+        try:
+            window.destroy()
+        except TclError:
+            pass
 
 
 def get_cpu_window_handler(window_title: str, cpu_handler: CpuHandler):
@@ -55,7 +61,7 @@ def get_cpu_window_handler(window_title: str, cpu_handler: CpuHandler):
     window.mainloop()
 
 
-def clicked_get_cpu(cpu_handler):
+def clicked_get_cpu(cpu_handler: CpuHandler):
     try:
         r = requests.get(
             f"http://localhost:5000/cpu?hash={cpu_handler.user_hash}&start_time={cpu_handler.start_time}&cur_time={time.time()}")

@@ -9,7 +9,7 @@ time_interval = 1
 
 
 class CpuHandler:
-    def __init__(self, running):
+    def __init__(self, running: bool) -> None:
         self.running = running
         self.user_hash = None
         self.start_time = time.time()
