@@ -30,11 +30,6 @@ class CpuHandler:
             print(r.json())
             time.sleep(time_interval)
 
-    def get_cpu(self, user_hash: str) -> None:
-        self.user_hash = user_hash
-        window_handler.GetCpuWindowHandler("Get cpu", self)
-        # draw_data(r.json()['payload'])
-
     @staticmethod
     def check_response_status(response: Response) -> bool:
         if response.status_code != HTTPStatus.OK:
