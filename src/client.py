@@ -2,6 +2,12 @@ from window_handler import credentials_window_handler, get_cpu_window_handler
 from threading import Thread
 from authentication_handler import AuthenticationHandler
 from cpu_handler import CpuHandler
+from logging import INFO, DEBUG, CRITICAL,  WARNING
+from log_handler import make_logs_dir, set_imported_modules_log_level, set_log_level
+
+file_name = make_logs_dir("logs")
+set_log_level(file_name, INFO)
+set_imported_modules_log_level(WARNING)
 
 
 def start_threads(user_hash: str, cpu_h: CpuHandler):

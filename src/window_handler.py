@@ -62,10 +62,5 @@ def get_cpu_window_handler(window_title: str, cpu_handler: CpuHandler):
 
 
 def clicked_get_cpu(cpu_handler: CpuHandler):
-    try:
-        r = requests.get(
-            f"http://localhost:5000/cpu?hash={cpu_handler.user_hash}&start_time={cpu_handler.start_time}&cur_time={time.time()}")
-        cpu_handler.check_response_status(r)
-        draw_handler.draw_data(r.json()['payload'])
-    except Exception:
-        draw_separate_window("Connection error")
+    cpu_handler.get_cpu()
+
