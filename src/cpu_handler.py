@@ -22,7 +22,7 @@ class CpuHandler:
         while self.running:
             cpu = psutil.cpu_percent()
             try:
-                r = requests.post("http://localhost:5000/cpu",
+                r = requests.post("http://localhost:8080/cpu",
                                   json={"hash": user_hash, "cpu": cpu, "time": time.time()})
             except requests.exceptions.RequestException:
                 logger.critical("Connection error")
@@ -36,7 +36,7 @@ class CpuHandler:
     def get_cpu(self):
         try:
             r = requests.get(
-                f"http://localhost:5000/cpu?hash={self.user_hash}&start_time={self.start_time}&cur_time={time.time()}")
+                f"http://localhost:8080/cpu?hash={self.user_hash}&start_time={self.start_time}&cur_time={time.time()}")
             if self.check_response_status(r):
                 draw_handler.draw_data(r.json()['payload'])
         except requests.exceptions.RequestException:

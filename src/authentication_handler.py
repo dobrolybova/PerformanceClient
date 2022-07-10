@@ -11,7 +11,7 @@ class AuthenticationHandler:
     def register(self, user_name: str, user_passwd: str) -> None:
         if self.validate_credentials(user_name, user_passwd):
             try:
-                r = requests.post("http://localhost:5000/register", json={"user": user_name, "passwd": user_passwd})
+                r = requests.post("http://localhost:8080/register", json={"user": user_name, "passwd": user_passwd})
                 if self.check_response_status(r):
                     self.hash = r.json()['hash']
             except requests.exceptions.RequestException:
@@ -20,7 +20,7 @@ class AuthenticationHandler:
     def login(self, user_name: str, user_passwd: str) -> None:
         if self.validate_credentials(user_name, user_passwd):
             try:
-                r = requests.post("http://localhost:5000/login", json={"user":  user_name, "passwd": user_passwd})
+                r = requests.post("http://localhost:8080/login", json={"user":  user_name, "passwd": user_passwd})
                 if self.check_response_status(r):
                     self.hash = r.json()['hash']
             except requests.exceptions.RequestException:
